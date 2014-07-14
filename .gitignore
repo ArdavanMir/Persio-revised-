@@ -1,0 +1,180 @@
+<html>
+<head>
+	<title>Persio</title>
+    <script src="http://code.jquery.com/jquery-latest.js"></script>
+    <script type="text/javascript" src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.5.1.min.js"></script>
+    <script type="text/javascript" src="http://ajax.aspnetcdn.com/ajax/jquery.ui/1.8.10/jquery-ui.min.js"></script>
+    <link href="http://ajax.aspnetcdn.com/ajax/jquery.ui/1.8.10/themes/ui-lightness/jquery-ui.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+
+<div id="draggable"><img src="vazirBlue.png" alt="vazir"></div>
+<div class="draggable2" id="draggable"><img src="vazirBlue.png" alt="vazir">
+</div>
+
+<div id="board">
+
+<button onclick="add()">Add</button>
+
+</div>
+
+<style type="text/css">
+
+#draggable{
+    display: inline-block;
+    width: 30px;
+    height: 30px;
+    z-index: 1;
+}
+
+#board {
+    font-size: 0;
+    border: 0px solid;
+    width: 510px;
+}
+
+.row {
+    display: block;
+    z-index: 0;
+}
+
+.tile {
+    display: inline-block;
+    width: 30px;
+    height: 30px;
+    z-index: 1;
+}
+
+
+.img {
+    display: block;
+    width: 30px;
+    height: 30px;
+    z-index: 999;
+    position: absolute;
+
+}
+
+.white {
+    background-color: #E0E0EB;
+}
+
+.black {
+    background-color: #8C8C8F;
+}
+
+</style>
+<script>
+
+////second piece
+ $(function() {
+$( "#draggable" ).draggable({ snap: true });
+});
+
+var rows = 23;
+var columns = 17;
+
+var tileNumber = 0;
+
+var board = document.getElementById("board");
+
+
+for(var y = 0; y < rows; y++) {
+    var row = document.createElement("div");
+    row.className = "row";
+
+    //var useWhiteA = true;
+    var useWhite = true;
+    for (var x = 0; x < columns; x++) {
+        var tile = document.createElement("div");
+
+        useWhite = true;
+
+        if(x % 2 == 0 && y % 2 != 0){
+        	useWhite = false;}
+
+        if(x % 2 != 0 && y % 2 == 0){
+        	useWhite = false;}
+
+        console.log('y', y, 'x', y, 'useWhite', useWhite);
+
+                    if(tileNumber<=6){
+                useWhite = true;}
+                if (tileNumber>9 && tileNumber<17){
+                    useWhite = true;
+                }
+                if (tileNumber>384){
+                    useWhite = true;
+                }
+                if (tileNumber<381 && tileNumber>374){
+                    useWhite = true;
+                }
+
+        if (useWhite){
+        	tile.className = "tile white";
+     	}
+        else
+        {
+         	tile.className = "tile black";
+     	}
+        // useWhite = !useWhite;
+
+        row.appendChild(tile);
+        tileNumber++;
+        tile.id=tileNumber.toString();
+        console.log('tileNumber:', tileNumber, 'tile id:', tile.id);
+    }
+
+    board.appendChild(row);
+}
+
+//draw pieces 
+/*
+var img = document.createElement("image");
+img.className = "img"
+img.src = "vazirBlue.png";
+document.getElementById("board").appendChild(img);
+*/
+
+
+var tile10 = document.getElementById("10");
+
+console.log('tile10', tile10);
+
+//var newVazir = $("acceptable");
+//newVazir.appendTo($("tile10"));
+//console.log(newVazir);
+
+function add(){
+
+    var vazir = document.createElement("IMAGE");
+    vazir.className = "img";
+    vazir.setAttribute("src", "vazirBlue.png");
+    tile10.appendChild(vazir);
+
+    console.log(vazir);
+
+}
+
+//dragging (this is just a )
+$('draggable2').draggable({ containment: "board", revert: 'invalid' }); //ask adam for this 
+
+$('tile black').droppable({
+    drop: function(event, ui) {
+        var dropped = ui.draggable;
+        var droppedOn = $(this);
+        $(droppedOn).droppable("disable");
+        $(dropped).parent().droppable("enable");
+        $(dropped).detach().css({top: 0, left: 0}).appendTo(droppedOn);
+    }
+});   
+
+$('tile black').not('tile black:empty').droppable("disable");
+    //tiling 
+    //var vazir = document.createElement("img");
+    //vazir.setAttribute("src", "vazirBlue.png");
+    //document.appendChild('10');
+</script>
+
+</body>
+</html>
